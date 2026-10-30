@@ -86,13 +86,20 @@ def verify_file_content(file_path, expected_content):
 def verify_service_running(service_name):
     """Verifies that a service is running (Linux-specific)."""
     try:
-        # Use systemctl to check service status.  Requires systemd.
-        result = os.system(f"systemctl is-active --quiet {service_name}")
-        if result == 0:
+        # The service name comes from the definition file, which is data,
+        # not trusted shell text. Passing it as one argv item keeps a name
+        # like 'x; touch /tmp/pwned' a single (nonexistent) unit name.
+        # With os.system it ran as shell, and because the injected command
+        # ran last, its success was even reported as the service running.
+        import subprocess
+        result = subprocess.run(
+            ["systemctl", "is-active", "--quiet", service_name],
+            check=False, capture_output=True,
+        )
+        if result.returncode == 0:
             return True
-        else:
-            logging.error(f"Service not running: {service_name}")
-            return False
+        logging.error(f"Service not running: {service_name}")
+        return False
     except Exception as e:
         logging.error(f"Error checking service status: {service_name} - {e}")
         return False
@@ -150,6 +157,13 @@ def main():
                 sys.exit(ExitCodes.VALIDATION_FAILED)
             logging.info("Definition validated successfully against schema.")
 
+
+        # An empty YAML file loads as None, and a top level list is not a
+        # definition either. Both are configuration errors, not the
+        # unexpected-error traceback the membership test used to raise.
+        if not isinstance(definition, dict):
+            logging.error("Definition file did not contain a mapping at the top level.")
+            sys.exit(ExitCodes.CONFIGURATION_ERROR)
 
         # Process infrastructure definition
         if 'files' in definition:
@@ -235,13 +249,3 @@ if __name__ == "__main__":
 #     Then run:
 #     python main.py -d infrastructure.yaml -t yaml -s infrastructure_schema.json
 #
-# Offensive Considerations:
-#
-# The tool itself is primarily defensive.  However, an attacker could target the
-# infrastructure definition file or schema file if those are accessible.
-# Therefore:
-#
-# - Protect the definition and schema files with appropriate permissions.
-# - Use checksums or other integrity checks on the definition file to ensure it hasn't been tampered with.
-# - Consider storing the definition file in a read-only location.
-# - Log any changes to the definition file.
