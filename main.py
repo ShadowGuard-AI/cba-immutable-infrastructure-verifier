@@ -138,6 +138,8 @@ def main():
         logging.getLogger().setLevel(logging.DEBUG)
         logging.debug("Verbose mode enabled.")
 
+    checks_performed = 0
+
     try:
         # Load infrastructure definition
         if args.type == 'yaml':
@@ -179,6 +181,7 @@ def main():
                     if not verify_file_content(file_path, expected_content):
                         logging.error(f"File content mismatch: {file_path}")
                         sys.exit(ExitCodes.VALIDATION_FAILED)
+                checks_performed += 1
                 logging.info(f"File {file_path} verified successfully.")
 
         if 'services' in definition:
@@ -187,6 +190,7 @@ def main():
                 if not verify_service_running(service_name):
                     logging.error(f"Service not running: {service_name}")
                     sys.exit(ExitCodes.VALIDATION_FAILED)
+                checks_performed += 1
                 logging.info(f"Service {service_name} verified successfully.")
     except FileNotFoundError:
         sys.exit(ExitCodes.FILE_NOT_FOUND)
@@ -200,7 +204,14 @@ def main():
         sys.exit(ExitCodes.UNEXPECTED_ERROR)
 
 
-    logging.info("Infrastructure verification complete. All checks passed.")
+    # A definition that named no files and no services checked nothing.
+    # Calling that a pass would report a clean result for a run that
+    # verified nothing, so it is a configuration error instead.
+    if checks_performed == 0:
+        logging.error("No checks were defined: the definition contains no files and no services entries, so nothing was verified.")
+        sys.exit(ExitCodes.CONFIGURATION_ERROR)
+
+    logging.info(f"Infrastructure verification complete. All checks passed. {checks_performed} check(s) performed.")
     sys.exit(ExitCodes.SUCCESS)
 
 
