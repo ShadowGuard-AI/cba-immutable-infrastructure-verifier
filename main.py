@@ -70,6 +70,12 @@ def verify_file_content(file_path, expected_content):
     try:
         with open(file_path, 'r') as f:
             content = f.read()
+            # Stripping both sides means a file that differs only in
+            # leading or trailing whitespace passes an immutability
+            # check. That trade is deliberate for hand maintained
+            # files, where a final newline is noise, but it does mean
+            # this verify is not byte exact, whatever the tool's name
+            # suggests.
             if content.strip() != expected_content.strip():  # Added strip() to ignore whitespace differences
                 logging.error(f"File content mismatch: {file_path}")
                 logging.debug(f"Expected: '{expected_content.strip()}', Actual: '{content.strip()}'")
@@ -168,6 +174,13 @@ def main():
             sys.exit(ExitCodes.CONFIGURATION_ERROR)
 
         # Process infrastructure definition
+        # Both sections run fail fast: the first failed check exits
+        # the process, so a run reports at most one problem and the
+        # remaining entries are never looked at. Fixing drift means
+        # running this, fixing the named item, and running it again
+        # until it comes back clean. A file entry with no path key
+        # raises KeyError and lands in the unexpected error exit at
+        # the bottom rather than the configuration error exit.
         if 'files' in definition:
             logging.info("Verifying file existence and content...")
             for file_def in definition['files']:
