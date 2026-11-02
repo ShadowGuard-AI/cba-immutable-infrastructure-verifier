@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="The weather plot in three layers: cloud bands drift at three different speeds across the top, the gauge in the middle stays still while the bright level in its window pulses gently once and rests, and grass along the path edge stirs in separate patches at the front while a puddle ripples once and goes flat">
+<rect x="0" y="0" width="1200" height="300" fill="#7d90a8"/>
+<g fill="#e8ddc8"><rect x="-200" y="18" width="1500" height="12" rx="6"><animateTransform attributeName="transform" type="translate" values="0 0;-60 0;0 0" dur="19s" repeatCount="indefinite"/></rect></g>
+<g fill="#8d9296"><rect x="-200" y="44" width="1500" height="15" rx="7"><animateTransform attributeName="transform" type="translate" values="0 0;-34 0;0 0" dur="27s" repeatCount="indefinite"/></rect></g>
+<g fill="#4c5256"><rect x="-200" y="74" width="1500" height="18" rx="9"><animateTransform attributeName="transform" type="translate" values="0 0;-16 0;0 0" dur="38s" repeatCount="indefinite"/></rect></g>
+<rect x="0" y="150" width="1200" height="150" fill="#6d7a68"/>
+<polygon points="60,300 330,300 620,208 690,196 620,192 300,272 30,282" fill="#aaa294"/>
+<g transform="translate(452 128)">
+<polygon points="-64,34 -122,8 122,8 64,34" fill="#a66034"/>
+<ellipse cx="0" cy="6" rx="126" ry="15" fill="#7a4222"/>
+<rect x="-46" y="34" width="92" height="86" fill="#a66034"/>
+<rect x="-11" y="44" width="22" height="66" fill="#e2eaec" stroke="#462c18" stroke-width="3"/>
+<rect x="-11" y="84" width="22" height="26" fill="#78b2ce"/>
+<line x1="-11" y1="84" x2="11" y2="84" stroke="#f4fafc" stroke-width="3">
+<animate attributeName="opacity" values="1;0.35;1;1" keyTimes="0;0.1;0.2;1" dur="15s" repeatCount="indefinite"/>
+</line>
+<polygon points="-150,138 150,138 168,156 -168,156" fill="#97978f"/>
+</g>
+<g stroke="#4e6248" stroke-width="3" fill="none">
+<path d="M120 268 q6 -10 14 -12"><animateTransform attributeName="transform" type="rotate" values="0 120 268;0 120 268;-6 120 268;0 120 268;0 120 268" keyTimes="0;0.4;0.5;0.6;1" dur="11s" repeatCount="indefinite"/></path>
+<path d="M880 282 q6 -10 14 -12"><animateTransform attributeName="transform" type="rotate" values="0 880 282;0 880 282;6 880 282;0 880 282;0 880 282" keyTimes="0;0.62;0.72;0.82;1" dur="13s" repeatCount="indefinite"/></path>
+<path d="M1020 258 q6 -10 14 -12"><animateTransform attributeName="transform" type="rotate" values="0 1020 258;-5 1020 258;0 1020 258;0 1020 258" keyTimes="0;0.16;0.26;1" dur="17s" repeatCount="indefinite"/></path>
+</g>
+<ellipse cx="700" cy="278" rx="52" ry="9" fill="#5f707c"/>
+<ellipse cx="700" cy="278" rx="10" ry="2.4" fill="none" stroke="#cfd8dc" stroke-width="2" opacity="0">
+<animate attributeName="rx" values="6;44" dur="16s" repeatCount="indefinite"/>
+<animate attributeName="ry" values="1.4;7" dur="16s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.7;0;0" keyTimes="0;0.08;0.3;1" dur="16s" repeatCount="indefinite"/>
+</ellipse>
+</svg>

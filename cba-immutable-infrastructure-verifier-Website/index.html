@@ -3,164 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cba Immutable Infrastructure Verifier: what it is, how it runs, where it stops</title>
-<meta name="description" content="Cba Immutable Infrastructure Verifier is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
+<title>cba-immutable-infrastructure-verifier: The Rain Gauge Keeper's Rounds</title>
+<meta name="description" content="Validates that a system configuration matches its declared immutable infrastructure definition, checks for deviation from the intended state, and alerts on any inconsistencies.">
 <style>
-:root {
-  --bg: #0a120e; --panel: #101c16; --ink: #e6f0e2;
-  --mut: #15251d;
-  --acc: #a8e05c; --acc2: #f0be54;
-  --line: #101c16;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: Verdana, Geneva, sans-serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'Lucida Console', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
+@font-face{font-family:'Bai Jamjuree';src:url('fonts/BaiJamjuree.ttf') format('truetype');}
+@font-face{font-family:'Bai Jamjuree';src:url('fonts/BaiJamjuree-SemiBold.ttf') format('truetype');font-weight:600;}
+@font-face{font-family:'Archivo';src:url('fonts/Archivo.ttf') format('truetype');}
+:root{--stone:#f0eee6;--grey:#6e7478;--greyd:#4c5256;--blue:#26548c;--orange:#d87434;--red:#ba2c24;--copper:#a66034;--ink:#232628}
+*{box-sizing:border-box}body{margin:0;background:var(--stone);color:var(--ink);font-family:'Archivo',sans-serif;line-height:1.65}
+h1,h2,h3{font-family:'Bai Jamjuree',sans-serif}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,var(--blue) 0 12%,#7d90a8 26%,var(--stone) 46%)}
+.hero img.heroimg{width:100%;height:56vh;object-fit:cover;display:block}
+.hero .in{padding:1rem 6vw 2rem;max-width:1120px;margin:0 auto;width:100%}
+.logo{width:200px}
+main{padding:0 6vw 3rem;max-width:1120px;margin:0 auto}
+nav{display:flex;gap:1.1rem;flex-wrap:wrap;margin:1.2rem 0}
+.cyl{display:inline-block;text-decoration:none;color:var(--greyd);font-family:'Bai Jamjuree',sans-serif;font-weight:600;font-size:.98rem;padding:1.05rem 1.1rem .8rem;border:3px solid rgba(76,82,86,.55);border-top:9px solid var(--copper);border-radius:6px 6px 12px 12px;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(190,214,226,.5));position:relative;transition:box-shadow .15s}
+.cyl::after{content:'';position:absolute;left:8px;right:8px;top:58%;height:4px;background:#5aa2c8;transition:top .18s}
+.cyl:hover::after{top:50%}
+.cyl:active::after{top:58%}
+.cyl:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px 6px 12px 12px}
+a{color:var(--blue)}
+a::before{content:'';display:inline-block;width:17px;height:9px;margin-right:.5em;vertical-align:1px;background:#c9c9c2;border-radius:50%;transition:background .15s}
+a:hover::before{background:#7e8587}
+.cyl::before{content:none}
+.shelter{background:repeating-linear-gradient(180deg,#848b8f 0 7px,#767c80 7px 12px);border:4px solid var(--greyd);border-radius:8px;padding:.4rem 0 0;margin:1.8rem 0;overflow:hidden}
+.shelter h2{color:#fff;padding:.4rem 1.5rem .2rem;margin:0;font-size:1.9rem;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.shelter .board{background:#e9e7dc;padding:.6rem 1.5rem 1.3rem;margin-top:.6rem}
+pre{background:#2b2f33;color:var(--stone);padding:1rem;overflow-x:auto;font-size:.95rem}
+.bands{height:30px;margin:2.2rem 0;position:relative}
+.bands i{position:absolute;left:0;right:0;display:block;border-radius:999px}
+.bands i:nth-child(1){top:0;height:8px;background:#e8ddc8}
+.bands i:nth-child(2){top:11px;height:8px;background:#8d9296}
+.bands i:nth-child(3){top:22px;height:8px;background:#4c5256;right:12%}
+.bands::after{content:'';position:absolute;right:0;top:22px;width:9%;height:8px;border-radius:999px;background:#4c5256}
+.notice{background:#e3e5e2;border-left:10px solid var(--greyd);padding:.2rem 1.3rem 1rem;margin:1.3rem 0;position:relative}
+.notice::before{content:'';position:absolute;top:10px;right:12px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:13px solid var(--red)}
+.notice h3{margin:.7rem 0 .3rem}
+.post{display:flex;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(35,38,40,.2)}
+.post b{font-family:'Bai Jamjuree',sans-serif;min-width:130px}
+.absent{color:var(--red);font-weight:700}
+footer{padding:1rem 6vw 2.4rem;max-width:1120px;margin:0 auto}
 </style>
 </head>
-<body class="layout-rail">
-<!-- This page exists for cba-immutable-infrastructure-verifier alone: the layout (sidebar-rail),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
+<body>
 <header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Cba Immutable Infrastructure Verifier logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Cba Immutable Infrastructure Verifier</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier">github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier</a></p>
+<img class="heroimg" src="assets/intro-banner.png" alt="The hill before the keeper sets out: a copper rain gauge close in the foreground with rain beaded on its rim and its level bright in the window, an empty path past a closed instrument shelter, cloud bands stacked above, and a lightning rod alone at the plot corner">
+<div class="in">
+<img class="logo" src="assets/logo.png" alt="A copper rain gauge in profile on a flat stone, funnel rim at the top, measuring window with its level a third of the way up, one fine rain line falling into the funnel, and the name cba-immutable-infrastructure-verifier beneath the stone">
+<h1>cba-immutable-infrastructure-verifier</h1>
+<p>The rounds themselves: a single path that visits each instrument in turn and does not branch. Yesterday record against this morning level. Declared definition against the live system in front of the checker.</p>
+<nav>
+<a class="cyl" href="#outcomes">Compare Against the Definition</a>
+<a class="cyl" href="#outcomes">Nothing Was Checked</a>
+<a class="cyl" href="#outcomes">Count the Checks</a>
+<a class="cyl" href="#params">The Five Parameters</a>
+</nav>
+</div>
 </header>
-
 <main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Cba Immutable Infrastructure Verifier is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Cba Immutable Infrastructure Verifier: 5 files, 273 counted
-          lines across Python 251, Markdown 20, Text 2. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier.git<br>$ cd cba-immutable-infrastructure-verifier</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 11 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>
-# Constants
-class ExitCodes:
-    SUCCESS = 0
-    INVALID_INPUT = 1
-    CONFIGURATION_ERROR = 2
-    VALIDATION_FAILED = 3
-    FILE_NOT_FOUND = 4
-    DEPENDENCY_ERROR = 5
-    PERMISSION_ERROR = 6
-    UNEXPECTED_ERROR = 99
-
-# Helper Functions
-def load_yaml(file_path):
-    &quot;&quot;&quot;Loads YAML data from a file.&quot;&quot;&quot;
-    try:
-        with open(file_path, &#x27;r&#x27;) as f:
-            return yaml.safe_load(f)
-    except FileNotFoundError:
-        logging.error(f&quot;YAML file not found: {file_path}&quot;)
-        raise FileNotFoundError(f&quot;YAML file not found: {file_path}&quot;) from None
-    except yaml.YAMLError as e:</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>251</td></tr>
-        <tr><td><code>README.md</code></td><td>20</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>2</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">ExitCodes, load_yaml, load_json, verify_file_exists, verify_file_content, verify_service_running, validate_json_against_schema, setup_argparse</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier/tree/main/cba-immutable-infrastructure-verifier-Visuals">cba-immutable-infrastructure-verifier-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Cba Immutable Infrastructure Verifier">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Cba Immutable Infrastructure Verifier">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Cba Immutable Infrastructure Verifier">
-        </div>
-      </section>
-    </div>
-  </section>
+<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">The Declared State</h2>
+<p>Validates that a system's configuration matches its declared immutable infrastructure definition (e.g., defined in Terraform or Ansible). Verifies the presence and integrity of specific files, services, and configurations defined in the infrastructure as code, ensuring that the system hasn't deviated from its intended state and alerting on any inconsistencies.</p>
+<div class="notice"><h3>Alert on Inconsistencies</h3>
+<p>Checking that the system has not deviated from its intended state, and alerting on any inconsistencies, is the centre of this stop on the rounds.</p></div>
+</div></section>
+<div class="bands"><i></i><i></i><i></i></div>
+<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">A Separate Focus on Baselines</h2>
+<p>Compares system configurations (e.g., application settings, firewall rules expressed in YAML/JSON) against predefined security baselines. Identifies deviations from the approved configuration and reports potential vulnerabilities or misconfigurations. Aims to automate the process of ensuring consistent security hardening across environments.</p>
+<p>Keeper note: the source presents this as a separate focus passage beginning with a broken bullet, so a visitor can see the two claims as the document gives them, side by side, rather than as one polished promise the document never quite makes.</p>
+</div></section>
+<div class="bands"><i></i><i></i><i></i></div>
+<section class="shelter" id="outcomes"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">Two Outcomes</h2>
+<div class="notice"><h3>No Files, No Services, Exit 2</h3>
+<p>A definition with no files entry and no services entry is a configuration error and exits 2, because nothing was checked.</p></div>
+<p>A passing run reports how many checks it performed.</p>
+<p>No other exit behaviour, report format, or alert channel is described in the source, and this panel says that at full size.</p>
+</div></section>
+<div class="bands"><i></i><i></i><i></i></div>
+<section class="shelter" id="params"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">The Gate at the End of the Path</h2>
+<pre>git clone https://github.com/ShadowStrikeHQ/cba-immutable-infrastructure-verifier</pre>
+<p>The install line as written. Beside it, a note: the clone names ShadowStrikeHQ while this repository lives under ShadowGuard-AI.</p>
+<pre>./cba-immutable-infrastructure-verifier [params]</pre>
+<p>The usage line as written, with no worked example in the source, and that absence stated here rather than filled.</p>
+<h2 style="color:var(--ink);text-shadow:none;padding:0">The Five Parameters</h2>
+<div class="post"><b>-h</b><span>Show help message and exit</span></div>
+<div class="post"><b>--definition</b><span class="absent">No description provided. This page does not guess which file it points to.</span></div>
+<div class="post"><b>--type</b><span class="absent">No description provided. This page does not guess what values it takes.</span></div>
+<div class="post"><b>--verbose</b><span>Enable verbose output for debugging. The one fully described switch in the set besides -h.</span></div>
+<div class="post"><b>--schema</b><span class="absent">No description provided. This page does not guess what it validates against.</span></div>
+<p>Three of the five posts therefore carry their absence as their label.</p>
+<p><a href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier">The repository on GitHub</a></p>
+</div></section>
+<div class="bands"><i></i><i></i><i></i></div>
+<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">Licence, the Last Stop</h2>
+<p>The rounds close with the line as written, with no licence named, reproduced as written:</p>
+<pre>Copyright (c) ShadowStrikeHQ</pre>
+</div></section>
 </main>
-<footer>
-  <p>Cba Immutable Infrastructure Verifier is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
-</footer>
+<footer><p>Theme: The Rain Gauge Keeper's Rounds. Type: Bai Jamjuree for display, Archivo for reading, both SIL Open Font License 1.1. The lettering reference Roddenberry was reference only and is not embedded.</p></footer>
 </body>
 </html>
