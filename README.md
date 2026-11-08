@@ -1,10 +1,8 @@
-![The hill before the keeper sets out: the copper gauge close in the foreground with overnight rain beaded on its funnel rim and its level bright in the window, three feet on a wet stone with a puddle reflecting a strip of orange sky, an empty path past a closed instrument shelter, cloud bands stacked above, and a lightning rod alone at the plot corner](intro-banner.png)
-
 # cba-Immutable-Infrastructure-Verifier
 
-![A hill weather station at dawn with the copper gauge in the foreground, a worn path past an instrument shelter with its louvred door ajar and a vane on its roof, a small keeper figure halfway up the path with a measure in hand, and the name cba-immutable-infrastructure-verifier painted in stone white on the panel grey shelter side](banner.png)
+![A foundry floor with rows of black iron castings standing beside their moulds and pine pattern blocks, a worker wearing one orange glove holding the nearest casting against its mould cavity to compare them](banner.png)
 
-![A copper rain gauge in profile on a flat stone, wide funnel rim at the top, green filmed copper, a measuring window with its level about a third of the way up, and one fine rain line falling into the funnel from above the frame, the heading plate](logo.png)
+![An open sand mould seen straight on with a simple rectangular cavity, a pine pattern block resting beside it on the sand and a single orange glove laid at its lower edge, the heading plate](logo.png)
 
 ![Weather plot scene in three layers: cloud bands drift at three speeds across the top, the gauge in the middle stays still while its bright level pulses gently once and rests, and grass stirs in separate patches along the path at the front while a puddle ripples once and goes flat](scene.svg)
 

@@ -3,103 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>cba-immutable-infrastructure-verifier: The Rain Gauge Keeper's Rounds</title>
-<meta name="description" content="Validates that a system configuration matches its declared immutable infrastructure definition, checks for deviation from the intended state, and alerts on any inconsistencies.">
+<title>cba-immutable-infrastructure-verifier: The Mould Floor</title>
 <style>
-@font-face{font-family:'Bai Jamjuree';src:url('fonts/BaiJamjuree.ttf') format('truetype');}
-@font-face{font-family:'Bai Jamjuree';src:url('fonts/BaiJamjuree-SemiBold.ttf') format('truetype');font-weight:600;}
-@font-face{font-family:'Archivo';src:url('fonts/Archivo.ttf') format('truetype');}
-:root{--stone:#f0eee6;--grey:#6e7478;--greyd:#4c5256;--blue:#26548c;--orange:#d87434;--red:#ba2c24;--copper:#a66034;--ink:#232628}
-*{box-sizing:border-box}body{margin:0;background:var(--stone);color:var(--ink);font-family:'Archivo',sans-serif;line-height:1.65}
-h1,h2,h3{font-family:'Bai Jamjuree',sans-serif}
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,var(--blue) 0 12%,#7d90a8 26%,var(--stone) 46%)}
-.hero img.heroimg{width:100%;height:56vh;object-fit:cover;display:block}
-.hero .in{padding:1rem 6vw 2rem;max-width:1120px;margin:0 auto;width:100%}
-.logo{width:200px}
-main{padding:0 6vw 3rem;max-width:1120px;margin:0 auto}
-nav{display:flex;gap:1.1rem;flex-wrap:wrap;margin:1.2rem 0}
-.cyl{display:inline-block;text-decoration:none;color:var(--greyd);font-family:'Bai Jamjuree',sans-serif;font-weight:600;font-size:.98rem;padding:1.05rem 1.1rem .8rem;border:3px solid rgba(76,82,86,.55);border-top:9px solid var(--copper);border-radius:6px 6px 12px 12px;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(190,214,226,.5));position:relative;transition:box-shadow .15s}
-.cyl::after{content:'';position:absolute;left:8px;right:8px;top:58%;height:4px;background:#5aa2c8;transition:top .18s}
-.cyl:hover::after{top:50%}
-.cyl:active::after{top:58%}
-.cyl:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px 6px 12px 12px}
-a{color:var(--blue)}
-a::before{content:'';display:inline-block;width:17px;height:9px;margin-right:.5em;vertical-align:1px;background:#c9c9c2;border-radius:50%;transition:background .15s}
-a:hover::before{background:#7e8587}
-.cyl::before{content:none}
-.shelter{background:repeating-linear-gradient(180deg,#848b8f 0 7px,#767c80 7px 12px);border:4px solid var(--greyd);border-radius:8px;padding:.4rem 0 0;margin:1.8rem 0;overflow:hidden}
-.shelter h2{color:#fff;padding:.4rem 1.5rem .2rem;margin:0;font-size:1.9rem;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-.shelter .board{background:#e9e7dc;padding:.6rem 1.5rem 1.3rem;margin-top:.6rem}
-pre{background:#2b2f33;color:var(--stone);padding:1rem;overflow-x:auto;font-size:.95rem}
-.bands{height:30px;margin:2.2rem 0;position:relative}
-.bands i{position:absolute;left:0;right:0;display:block;border-radius:999px}
-.bands i:nth-child(1){top:0;height:8px;background:#e8ddc8}
-.bands i:nth-child(2){top:11px;height:8px;background:#8d9296}
-.bands i:nth-child(3){top:22px;height:8px;background:#4c5256;right:12%}
-.bands::after{content:'';position:absolute;right:0;top:22px;width:9%;height:8px;border-radius:999px;background:#4c5256}
-.notice{background:#e3e5e2;border-left:10px solid var(--greyd);padding:.2rem 1.3rem 1rem;margin:1.3rem 0;position:relative}
-.notice::before{content:'';position:absolute;top:10px;right:12px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:13px solid var(--red)}
-.notice h3{margin:.7rem 0 .3rem}
-.post{display:flex;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(35,38,40,.2)}
-.post b{font-family:'Bai Jamjuree',sans-serif;min-width:130px}
-.absent{color:var(--red);font-weight:700}
-footer{padding:1rem 6vw 2.4rem;max-width:1120px;margin:0 auto}
+@font-face { font-family: "Lalezar"; src: url("fonts/Lalezar-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Thasadith"; src: url("fonts/Thasadith-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Thasadith"; src: url("fonts/Thasadith-700.woff2") format("woff2"); font-weight: 700; }
+:root {
+  --sand: #e9dfc9; --floor: #f5efe1; --ink: #26221c; --soft: #6f6455;
+  --iron: #35322d; --orange: #d96f26; --line: #d9cbae; --card: #fffdf7;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--floor); color: var(--ink); font-family: "Thasadith", sans-serif; line-height: 1.55; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
+header.hero { text-align: center; padding: 52px 0 8px; }
+img.hero-logo { width: min(430px, 82vw); border-radius: 6px; box-shadow: 0 10px 34px rgba(38,34,28,.25); }
+h1, h2 { font-family: "Lalezar", serif; font-weight: 400; line-height: 1.15; }
+h1 { font-size: clamp(29px, 5vw, 47px); margin: 26px 0 6px; }
+.tagline { color: var(--soft); font-size: 19px; margin: 0 auto; max-width: 680px; }
+.btns { margin: 22px 0 6px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+a.btn { font-family: "Lalezar", serif; text-decoration: none; padding: 11px 22px; border-radius: 4px; border: 2px solid var(--iron); color: var(--iron); background: transparent; }
+a.btn.solid { background: var(--orange); border-color: var(--orange); color: #fff; }
+figure { margin: 30px 0; }
+figure img { width: 100%; border-radius: 8px; display: block; box-shadow: 0 8px 28px rgba(38,34,28,.20); }
+figcaption { color: var(--soft); font-size: 15px; text-align: center; margin-top: 9px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 34px 0; }
+.fact { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--orange); border-radius: 6px; padding: 14px 16px; }
+.fact b { display: block; font-family: "Lalezar", serif; font-weight: 400; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--iron); margin-bottom: 4px; }
+section { margin: 38px 0; }
+h2 { font-size: 27px; margin: 0 0 12px; border-bottom: 2px solid var(--line); padding-bottom: 7px; }
+code, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+pre { background: var(--iron); color: #f3ecdd; padding: 15px 18px; border-radius: 8px; overflow-x: auto; font-size: 14.5px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); }
+th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { font-family: "Lalezar", serif; font-weight: 400; background: var(--sand); }
+.hold { background: #fdf3e7; border: 1px solid #eacfae; border-left: 6px solid var(--orange); border-radius: 8px; padding: 16px 20px; }
+.hold h2 { border: none; padding: 0; }
+.hold ul { margin: 8px 0 4px; padding-left: 20px; }
+footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px; color: var(--soft); font-size: 14.5px; text-align: center; }
 </style>
 </head>
 <body>
+<div class="wrap">
 <header class="hero">
-<img class="heroimg" src="assets/intro-banner.png" alt="The hill before the keeper sets out: a copper rain gauge close in the foreground with rain beaded on its rim and its level bright in the window, an empty path past a closed instrument shelter, cloud bands stacked above, and a lightning rod alone at the plot corner">
-<div class="in">
-<img class="logo" src="assets/logo.png" alt="A copper rain gauge in profile on a flat stone, funnel rim at the top, measuring window with its level a third of the way up, one fine rain line falling into the funnel, and the name cba-immutable-infrastructure-verifier beneath the stone">
-<h1>cba-immutable-infrastructure-verifier</h1>
-<p>The rounds themselves: a single path that visits each instrument in turn and does not branch. Yesterday record against this morning level. Declared definition against the live system in front of the checker.</p>
-<nav>
-<a class="cyl" href="#outcomes">Compare Against the Definition</a>
-<a class="cyl" href="#outcomes">Nothing Was Checked</a>
-<a class="cyl" href="#outcomes">Count the Checks</a>
-<a class="cyl" href="#params">The Five Parameters</a>
-</nav>
-</div>
+  <img class="hero-logo" src="assets/logo.png" alt="An open sand mould seen straight on with a simple rectangular cavity, a pine pattern block resting beside it on the sand and a single orange glove laid at its lower edge">
+  <h1>cba-immutable-infrastructure-verifier</h1>
+  <p class="tagline">The Mould Floor. A command line verifier that carries a system back to the shape declared for it: it validates that the system's configuration matches its declared immutable infrastructure definition, checking the files, services, and configurations the definition names.</p>
+  <div class="btns">
+    <a class="btn solid" href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier">The repository</a>
+    <a class="btn" href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier/blob/main/main.py">main.py</a>
+  </div>
 </header>
-<main>
-<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">The Declared State</h2>
-<p>Validates that a system's configuration matches its declared immutable infrastructure definition (e.g., defined in Terraform or Ansible). Verifies the presence and integrity of specific files, services, and configurations defined in the infrastructure as code, ensuring that the system hasn't deviated from its intended state and alerting on any inconsistencies.</p>
-<div class="notice"><h3>Alert on Inconsistencies</h3>
-<p>Checking that the system has not deviated from its intended state, and alerting on any inconsistencies, is the centre of this stop on the rounds.</p></div>
-</div></section>
-<div class="bands"><i></i><i></i><i></i></div>
-<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">A Separate Focus on Baselines</h2>
-<p>Compares system configurations (e.g., application settings, firewall rules expressed in YAML/JSON) against predefined security baselines. Identifies deviations from the approved configuration and reports potential vulnerabilities or misconfigurations. Aims to automate the process of ensuring consistent security hardening across environments.</p>
-<p>Keeper note: the source presents this as a separate focus passage beginning with a broken bullet, so a visitor can see the two claims as the document gives them, side by side, rather than as one polished promise the document never quite makes.</p>
-</div></section>
-<div class="bands"><i></i><i></i><i></i></div>
-<section class="shelter" id="outcomes"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">Two Outcomes</h2>
-<div class="notice"><h3>No Files, No Services, Exit 2</h3>
-<p>A definition with no files entry and no services entry is a configuration error and exits 2, because nothing was checked.</p></div>
-<p>A passing run reports how many checks it performed.</p>
-<p>No other exit behaviour, report format, or alert channel is described in the source, and this panel says that at full size.</p>
-</div></section>
-<div class="bands"><i></i><i></i><i></i></div>
-<section class="shelter" id="params"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">The Gate at the End of the Path</h2>
-<pre>git clone https://github.com/ShadowStrikeHQ/cba-immutable-infrastructure-verifier</pre>
-<p>The install line as written. Beside it, a note: the clone names ShadowStrikeHQ while this repository lives under ShadowGuard-AI.</p>
-<pre>./cba-immutable-infrastructure-verifier [params]</pre>
-<p>The usage line as written, with no worked example in the source, and that absence stated here rather than filled.</p>
-<h2 style="color:var(--ink);text-shadow:none;padding:0">The Five Parameters</h2>
-<div class="post"><b>-h</b><span>Show help message and exit</span></div>
-<div class="post"><b>--definition</b><span class="absent">No description provided. This page does not guess which file it points to.</span></div>
-<div class="post"><b>--type</b><span class="absent">No description provided. This page does not guess what values it takes.</span></div>
-<div class="post"><b>--verbose</b><span>Enable verbose output for debugging. The one fully described switch in the set besides -h.</span></div>
-<div class="post"><b>--schema</b><span class="absent">No description provided. This page does not guess what it validates against.</span></div>
-<p>Three of the five posts therefore carry their absence as their label.</p>
-<p><a href="https://github.com/ShadowGuard-AI/cba-immutable-infrastructure-verifier">The repository on GitHub</a></p>
-</div></section>
-<div class="bands"><i></i><i></i><i></i></div>
-<section class="shelter"><div class="board"><h2 style="color:var(--ink);text-shadow:none;padding:0">Licence, the Last Stop</h2>
-<p>The rounds close with the line as written, with no licence named, reproduced as written:</p>
-<pre>Copyright (c) ShadowStrikeHQ</pre>
-</div></section>
-</main>
-<footer><p>Theme: The Rain Gauge Keeper's Rounds. Type: Bai Jamjuree for display, Archivo for reading, both SIL Open Font License 1.1. The lettering reference Roddenberry was reference only and is not embedded.</p></footer>
+
+<div class="facts">
+  <div class="fact"><b>What is checked</b>The presence and integrity of specific files, services, and configurations defined in the infrastructure as code</div>
+  <div class="fact"><b>Checked against</b>The declared immutable infrastructure definition, for example one defined in Terraform or Ansible</div>
+  <div class="fact"><b>A passing run</b>Reports how many checks it performed</div>
+  <div class="fact"><b>Dependencies</b>jsonschema and PyYAML</div>
+</div>
+
+<section>
+  <h2>Parameters</h2>
+  <table>
+    <tr><th>Option</th><th>What the README records</th></tr>
+    <tr><td><code>--definition</code></td><td>No description provided.</td></tr>
+    <tr><td><code>--type</code></td><td>No description provided.</td></tr>
+    <tr><td><code>--schema</code></td><td>No description provided.</td></tr>
+    <tr><td><code>--verbose</code></td><td>Enable verbose output for debugging.</td></tr>
+    <tr><td><code>-h</code></td><td>Show help message and exit.</td></tr>
+  </table>
+  <p>The README does not guess which file <code>--definition</code> points to, what values <code>--type</code> takes, or what <code>--schema</code> validates against, and neither does this site.</p>
+</section>
+
+<figure>
+  <img src="assets/banner.png" alt="A foundry floor with rows of black iron castings standing beside their moulds and pine pattern blocks, a worker wearing one orange glove holding the nearest casting against its mould cavity to compare them">
+  <figcaption>Finished work, carried back to the mould that declared it and compared piece by piece.</figcaption>
+</figure>
+
+<section class="hold">
+  <h2>Stated limits</h2>
+  <ul>
+    <li>A definition with no files and no services entries is a configuration error and exits 2, because nothing was checked.</li>
+    <li>A passing run reports how many checks it performed.</li>
+    <li><code>--definition</code>, <code>--type</code>, and <code>--schema</code> are each listed with no description provided; no descriptions, defaults, or accepted values are invented for them here.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>The README of cba-immutable-infrastructure-verifier closes with a copyright line naming ShadowStrikeHQ and names no licence. This repository also carries a SECURITY.md at its root. Site type is set in Lalezar and Thasadith, self-hosted under the SIL Open Font License.</p>
+</footer>
+</div>
 </body>
 </html>
