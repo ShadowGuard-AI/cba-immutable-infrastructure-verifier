@@ -1,3 +1,5 @@
+![A black iron casting held in an orange gloved hand above its open sand mould, its shape set against the cavity below it for comparison, the foundry floor soft behind](intro-banner.png)
+
 # cba-Immutable-Infrastructure-Verifier
 
 ![A foundry floor with rows of black iron castings standing beside their moulds and pine pattern blocks, a worker wearing one orange glove holding the nearest casting against its mould cavity to compare them](banner.png)
